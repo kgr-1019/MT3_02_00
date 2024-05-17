@@ -522,17 +522,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	float kWindowsWidth = 1280.0f;
 	float kWindowsHeight = 720.0f;
 
-
 	// カメラ
+	Vector3 cameraScale{ 1.0f,1.0f,1.0f };
 	Vector3 cameraTranslate{ 0.0f,1.9f,-6.49f };// カメラの位置
 	Vector3 cameraRotate{ 0.26f,0.0f,0.0f };// カメラの角度
 
+	// スフィアの定義
 	Sphere sphere{{0.0f,0.0f,0.0f},0.5f,};
 
+	// 
 	Segment segment{ {-2.0f,-1.0f,0.0f},{3.0f,2.0f,2.0f} };
 	Vector3 point{ -1.5f,0.6f,0.6f };
 
 	uint32_t color[3]{ WHITE,RED,BLACK };
+
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -548,7 +551,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 
 
-		Matrix4x4 worldMatrix = MakeAffineMatrix({ 1.0f,1.0f,1.0f }, cameraRotate, cameraTranslate);
+		Matrix4x4 worldMatrix = MakeAffineMatrix(cameraScale, cameraRotate, cameraTranslate);
 
 		Matrix4x4 viewMatrix = Inverse(worldMatrix);
 
@@ -558,14 +561,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		Matrix4x4 viewportMatrix = MakeViewportMatrix(0, 0, float(kWindowsWidth), float(kWindowsHeight), 0.0f, 1.0f);
 
+		// 正射影ベクトル
 		Vector3 project = Project(Subtract(point, segment.origin), segment.diff);
-
+		// 最近接点
 		Vector3 closestPoint = ClosestPoint(point, segment);
 
 		Sphere pointSphere{ point,0.01f };
-
 		Sphere closestPointSphere{ closestPoint,0.01f };
 
+		// 線の始点終点
 		Vector3 start = Transform(Transform(segment.origin, worldViewProjectionMatrix), viewportMatrix);
 		Vector3 end = Transform(Transform(Add(segment.origin, segment.diff), worldViewProjectionMatrix), viewportMatrix);
 
