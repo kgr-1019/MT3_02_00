@@ -463,21 +463,21 @@ void DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjectionMatrix, con
 
 			// ワールド座標系での頂点を求める
 			a = {
-				(sphere.center.x + sphere.radius) * std::cos(lat) * std::cos(lon),
-				(sphere.center.y + sphere.radius) * std::sin(lat),
-				(sphere.center.z + sphere.radius) * std::cos(lat) * std::sin(lon)
+				(sphere.radius) * std::cos(lat) * std::cos(lon) + sphere.center.x,
+				(sphere.radius) * std::sin(lat) + sphere.center.y,
+				(sphere.radius) * std::cos(lat) * std::sin(lon) + sphere.center.z
 			};
 
 			b = {
-				(sphere.center.x + sphere.radius) * std::cos(lat + kLatEvery) * std::cos(lon),
-				(sphere.center.y + sphere.radius) * std::sin(lat + kLatEvery),
-				(sphere.center.z + sphere.radius) * std::cos(lat + kLatEvery) * std::sin(lon)
+				(sphere.radius) * std::cos(lat + kLatEvery) * std::cos(lon) + sphere.center.x,
+				(sphere.radius) * std::sin(lat + kLatEvery) + sphere.center.y,
+				(sphere.radius) * std::cos(lat + kLatEvery) * std::sin(lon) + sphere.center.z
 			};
 
 			c = {
-				(sphere.center.x + sphere.radius) * std::cos(lat) * std::cos(lon + kLonEvery),
-				(sphere.center.y + sphere.radius) * std::sin(lat),
-				(sphere.center.z + sphere.radius) * std::cos(lat) * std::sin(lon + kLonEvery)
+				(sphere.radius) * std::cos(lat) * std::cos(lon + kLonEvery) + sphere.center.x,
+				(sphere.radius) * std::sin(lat) + sphere.center.y,
+				(sphere.radius) * std::cos(lat) * std::sin(lon + kLonEvery) + sphere.center.z
 			};
 
 			// a,b,cをScreen座標系まで変換
